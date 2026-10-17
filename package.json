@@ -144,6 +144,17 @@
         "icon": "$(settings-gear)"
       },
       {
+        "command": "solutionExplorer.setStartupProject",
+        "title": "%command.setStartupProject.title%",
+        "category": "%category.solutionExplorer%",
+        "icon": "$(pin)"
+      },
+      {
+        "command": "solutionExplorer.clearStartupProject",
+        "title": "%command.clearStartupProject.title%",
+        "category": "%category.solutionExplorer%"
+      },
+      {
         "command": "solutionExplorer.createFile",
         "title": "%command.createFile.title%",
         "category": "%category.solutionExplorer%",
@@ -465,6 +476,16 @@
           "command": "solutionExplorer.editMsBuildProperties",
           "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.editMsBuildProperties",
           "group": "2_workspace"
+        },
+        {
+          "command": "solutionExplorer.setStartupProject",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.setStartupProject",
+          "group": "1_startup@1"
+        },
+        {
+          "command": "solutionExplorer.clearStartupProject",
+          "when": "view in solutionexplorer.viewTypes && viewItem in solutionExplorer.cmdAllowedContexts.clearStartupProject && solutionExplorer.hasStartupProject",
+          "group": "1_startup@2"
         },
         {
           "command": "solutionExplorer.editMsBuildProperties",

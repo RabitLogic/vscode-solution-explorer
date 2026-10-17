@@ -22,6 +22,7 @@ Table of Content:
     - [Find Solution files](#find-solution-files)
   - [Features](#features)
     - [Run dotnet commands in solutions and projects](#run-dotnet-commands-in-solutions-and-projects)
+    - [Startup project](#startup-project)
     - [Drag and drop files, folders and projects](#drag-and-drop-files-folders-and-projects)
     - [Create, delete, rename or project folders and files](#create-delete-rename-or-project-folders-and-files)
     - [Create, delete, rename or move solution, solution folders and projects](#create-delete-rename-or-move-solution-solution-folders-and-projects)
@@ -158,6 +159,12 @@ As an example, if you want to compile in `Release` mode every time you publish a
   }
 }
 ```
+
+### Startup project
+
+Right-click a project and select **Set as Startup Project** to mark it as the startup project of its solution. The startup project is sorted first (its containing solution folder is moved to the top as well) and its name is colored with the theme highlight color (foreground only, no background). Use **Clear Startup Project** on the same project to remove the mark.
+
+The selection is stored per solution in the workspace state, so it survives window reloads without changing the `.sln` file.
 
 ### Drag and drop files, folders and projects
 

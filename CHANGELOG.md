@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-solution-explorer" extension will be documented in this file.
 
+## Unreleased
+
+Feature: startup project. Use "Set as Startup Project" on a project context menu to pin it to the top of its solution folder and color its name with the theme highlight color.
+
 ## 0.9.8
 
 PR #360: nest related items that keep the parent's full name- #360. Thanks to [RabitLogic](https://github.com/RabitLogic)

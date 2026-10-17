@@ -43,6 +43,7 @@ export * from "./DotNetPublish";
 export * from "./RefreshTree";
 export * from "./RefreshTreeItem";
 export * from "./SetMsBuildPropertyOverrides";
+export * from "./SetStartupProject";
 export * from "./DotNetRemoveExistingProject";
 export * from "./DotNetRemovePackageReference";
 export * from "./DotNetRemoveProjectReference";

@@ -2,12 +2,15 @@ import * as vscode from "vscode";
 import * as config from "@extensions/config";
 import * as sln from "@tree";
 
+import { Solution, SolutionItem, SolutionProject } from "@core/Solutions";
+import { isSamePath } from "@core/Solutions/SolutionItemSort";
 import { IEventAggregator, EventTypes, IEvent, ISubscription, IFileEvent } from "@events";
 import { ILogger } from "@logs";
 import { TemplateEngineCollection } from "@templates";
 import { SolutionFinder } from "./SolutionFinder";
 import { SolutionExplorerDragAndDropController } from "./SolutionExplorerDragAndDropController";
 import { SolutionTreeItemCollection } from "./SolutionTreeItemCollection";
+import { StartupProjectService } from "./StartupProjectService";
 
 export class SolutionExplorerProvider extends vscode.Disposable implements vscode.TreeDataProvider<sln.TreeItem> {
 	private fileSubscription: ISubscription | undefined;
@@ -19,6 +22,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		        private readonly solutionTreeItemCollection: SolutionTreeItemCollection,
 				private readonly dragAndDropController: SolutionExplorerDragAndDropController,
 				private readonly templateEngineCollection: TemplateEngineCollection,
+				private readonly startupProjectService: StartupProjectService,
 				public readonly eventAggregator: IEventAggregator,
 				public readonly logger: ILogger) {
 
@@ -43,6 +47,7 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.viewInNone', showMode === "none");
 		vscode.commands.executeCommand('setContext', 'solutionExplorer.loadedFlag', !false);
 		vscode.commands.executeCommand('setContext', 'solutionexplorer.viewTypes', ["slnexpl", "slnbrw"]);
+		vscode.commands.executeCommand('setContext', 'solutionExplorer.hasStartupProject', this.startupProjectService.hasStartupProject());
 
 		if (showMode !== "none") {
 			const options = {
@@ -101,6 +106,35 @@ export class SolutionExplorerProvider extends vscode.Disposable implements vscod
 
 	public getTreeItem(element: sln.TreeItem): vscode.TreeItem {
 		return element;
+	}
+
+	public getStartupProject(solutionPath: string): string | undefined {
+		return this.startupProjectService.getStartupProject(solutionPath);
+	}
+
+	public hasStartupProject(solution: Solution): boolean {
+		return !!this.getStartupProject(solution.fullPath);
+	}
+
+	public findStartupProject(solution: Solution): SolutionProject | undefined {
+		const startupProject = this.getStartupProject(solution.fullPath);
+		if (!startupProject) { return undefined; }
+		return solution.getAllProjects().find(p => isSamePath(p.fullPath, startupProject));
+	}
+
+	public isStartupProject(solution: Solution, solutionItem: SolutionItem | undefined): boolean {
+		if (!solutionItem || !solutionItem.fullPath) { return false; }
+		return this.startupProjectService.isStartupProject(solution.fullPath, solutionItem.fullPath);
+	}
+
+	public async setStartupProject(solution: Solution, projectPath: string | undefined): Promise<void> {
+		if (projectPath) {
+			await this.startupProjectService.setStartupProject(solution.fullPath, projectPath);
+		} else {
+			await this.startupProjectService.clearStartupProject(solution.fullPath);
+		}
+
+		await vscode.commands.executeCommand('setContext', 'solutionExplorer.hasStartupProject', this.startupProjectService.hasStartupProject());
 	}
 
 	public getSelectedItems(): readonly sln.TreeItem[] | undefined {

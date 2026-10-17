@@ -88,6 +88,12 @@ export class SolutionExplorerCommands {
         this.commands['editMsBuildProperties'] = [new cmds.EditMsBuildPropertiesCommand(context, provider),
             both(ContextValues.solution, ContextValues.project)];
 
+        this.commands['setStartupProject'] = [new cmds.SetStartupProjectCommand(provider),
+            [ContextValues.project, ...both(ContextValues.project)]];
+
+        this.commands['clearStartupProject'] = [new cmds.ClearStartupProjectCommand(provider),
+            [ContextValues.project, ...both(ContextValues.project)]];
+
         this.commands['focus'] = [new cmds.FocusCommand(provider),
             undefined];
 
